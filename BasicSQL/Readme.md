@@ -57,7 +57,7 @@ Gender ENUM('Male','Female','Transgender'),
 MaritalStatus ENUM('Married', 'Divorced', 'Single'),
 NetWorthInMillions DECIMAL);
 
-SHOW TABLES;/*show all the tables in the database*/
+SHOW TABLES;/*show names of all the tables in the database*/
 
 DESC Actors; /*display all the columns of the table and related metadata(data type and nullability)*/
 ```
