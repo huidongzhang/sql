@@ -129,6 +129,8 @@ VALUES
 ("Johnny", "Depp", "1963-06-09", "Male", "Single", 200.00);
 
 -- Query 3
+-- The order of the values should be the same as the order of the columns in the table 
+-- or that listed by the describe table query.
 INSERT INTO Actors 
 VALUES (DEFAULT, "Dream", "Actress", "9999-01-01", "Female", "Single", 000.00);
 
