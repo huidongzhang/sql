@@ -138,7 +138,9 @@ INSERT INTO Actors VALUES (NULL, "Reclusive", "Actor", "1980-01-01", "Male", "Si
 -- Query 5: insert a row with all default values 
 -- If a column doesn't have a default value defined, it is assigned NULL as default.
 -- The above query will fail if any one of the table columns is specified as not-null. 
--- DEFAULT keyword also comes in handy when working with the TIMESTAMP column. The default value for a TIMESTAMP column is the current timestamp, which may be what we want when inserting a new row.
+-- DEFAULT keyword also comes in handy when working with the TIMESTAMP column. 
+-- The default value for a TIMESTAMP column is the current timestamp, 
+-- which may be what we want when inserting a new row.
 INSERT INTO Actors () VALUES ();
 
 -- Query 6
