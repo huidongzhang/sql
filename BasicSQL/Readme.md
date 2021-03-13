@@ -45,9 +45,10 @@ col3 <dataType> <Restrictions>,
 Note that column names are case-insensitive and portable across all operating systems, unlike database names.
 ```sql
 columnName columnType [NOT NULL | NULL][DEFAULT columnValue]
+- `NOT NULL` and `DEFAULT` can be used together
 ```
 
-Example
+Example 1
 ```sql
 CREATE TABLE Actors (
 FirstName VARCHAR(20),
@@ -60,4 +61,42 @@ NetWorthInMillions DECIMAL);
 SHOW TABLES;/*show names of all the tables in the database*/
 
 DESC Actors; /*display all the columns of the table and related metadata(data type and nullability)*/
+```
+
+Example 2
+```sql
+CREATE TABLE IF NOT EXISTS Actors (
+Id INT AUTO_INCREMENT,
+FirstName VARCHAR(20) NOT NULL,
+SecondName VARCHAR(20) NOT NULL,
+DoB DATE NOT NULL,
+Gender ENUM('Male','Female','Transgender') NOT NULL,
+MaritalStatus ENUM('Married', 'Divorced', 'Single', 'Unknown') DEFAULT "Unknown",
+NetWorthInMillions DECIMAL NOT NULL,
+PRIMARY KEY (Id));
+```
+- `PRIMARY KEY (**)`: Uniquely identify a row by designating a single column or a set of columns.
+- `AUTO_INCREMENT`: begins at 1; only one column can be marked as AUTO_increment; can't have a default value; must be indexed.
+
+### Temporary Table
+Temporary tables are persisted for the duration of the MySQL monitor session and removed once the session is terminated.
+
+Can be used to work with intermediate data or results.
+
+- Syntax
+```sql
+CREATE TEMPORARY TABLE tableName (
+
+col1 <dataType> <Restrictions>,
+
+col2 <dataType> <Restrictions>,
+
+col3 <dataType> <Restrictions>,
+
+<Primary Key or Index definitions>);
+```
+
+Example: Say we want to capture only the first names of actors in a table. We can create a temporary table and populate it with only the first name as follows:
+```sql
+CREATE TEMPORARY TABLE ActorNames (FirstName CHAR(20));
 ```
