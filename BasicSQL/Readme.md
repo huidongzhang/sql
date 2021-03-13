@@ -86,13 +86,9 @@ Can be used to work with intermediate data or results.
 - Syntax
 ```sql
 CREATE TEMPORARY TABLE tableName (
-
 col1 <dataType> <Restrictions>,
-
 col2 <dataType> <Restrictions>,
-
 col3 <dataType> <Restrictions>,
-
 <Primary Key or Index definitions>);
 ```
 
@@ -100,3 +96,50 @@ Example: Say we want to capture only the first names of actors in a table. We ca
 ```sql
 CREATE TEMPORARY TABLE ActorNames (FirstName CHAR(20));
 ```
+
+### Collations & Character Sets
+A character set defines what characters MySQL can store.
+A collation set decides how strings are ordered.
+- By default, MySQL uses the `latin-1` character set that has an associated default `latin1_swedish_ci` collation. The `ci` in the name implies case insensitive and the accented characters are sorted using Swedish conventions.
+```sql
+SHOW CHARACTER SET; /*available character sets on the server*/
+SHOW COLLATION; /*list the collation*/
+SHOW VARIABLES LIKE "c%"; /*show defaults for the server*/
+```
+### Inserting Data
+Syntax
+```sql
+INSERT INTO table (col1, col2 … coln)
+VALUES (val1, val2, … valn);
+```
+
+Example
+```sql
+-- Query 1
+INSERT INTO Actors ( 
+FirstName, SecondName, DoB, Gender, MaritalStatus, NetworthInMillions) 
+VALUES ("Brad", "Pitt", "1963-12-18", "Male", "Single", 240.00);
+
+-- Query 2
+INSERT INTO Actors ( 
+FirstName, SecondName, DoB, Gender, MaritalStatus, NetworthInMillions) 
+VALUES 
+("Jennifer", "Aniston", "1969-11-02", "Female", "Single", 240.00),
+("Angelina", "Jolie", "1975-06-04", "Female", "Single", 100.00),
+("Johnny", "Depp", "1963-06-09", "Male", "Single", 200.00);
+
+-- Query 3
+INSERT INTO Actors 
+VALUES (DEFAULT, "Dream", "Actress", "9999-01-01", "Female", "Single", 000.00);
+
+-- Query 4
+INSERT INTO Actors VALUES (NULL, "Reclusive", "Actor", "1980-01-01", "Male", "Single", DEFAULT);
+
+-- Query 5
+INSERT INTO Actors () VALUES ();
+
+-- Query 6
+INSERT INTO Actors SET DoB="1950-12-12", FirstName="Rajnikanth", SecondName="",  Gender="Male", NetWorthInMillions=50,  MaritalStatus="Married";
+
+```
+
