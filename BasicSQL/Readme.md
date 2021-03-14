@@ -320,5 +320,31 @@ SELECT FirstName, SecondName from Actors ORDER BY NetWorthInMillions DESC LIMIT 
 SELECT FirstName, SecondName from Actors ORDER BY NetWorthInMillions DESC LIMIT 18446744073709551616;
 ```
 
+### Deleting Data
+A delete statement deletes an entire row and not individual columns.
+Deleting all the rows of a table doesn't delete the table itself.
+```sql
+DELETE FROM table
+WHERE col3 > 5
+ORDER BY col1
+LIMIT 5;
+```
+Example
+```sql
+-- Query 1
+-- The string comparison for the FirstName performed by MySQL doesn't take case into account
+-- If we specified the WHERE clause with an uppercase as FirstName="PRIYANKA" the row would still be deleted.
+DELETE FROM Actors WHERE FirstName="priyanka";
+-- Query 2
+DELETE FROM Actors WHERE Gender="Male";
+-- Query 3
+-- Delete the top three actresses by net worth
+DELETE FROM Actors ORDER BY NetWorthInMillions DESC LIMIT 3;
+-- Query 4
+-- Remove all the rows
+-- The table can still be queried even after we have removed all the rows from it
+DELETE FROM Actors;
+```
+
 
 
