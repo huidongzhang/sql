@@ -372,9 +372,48 @@ UPDATE Actors SET NetWorthInMillions=1;
 UPDATE Actors SET NetWorthInMillions=5 ORDER BY FirstName LIMIT 3;
 --Query 3
 UPDATE Actors SET NetWorthInMillions=50, MaritalStatus="Single";
-
-
 ```
+
+### Primary Key and Indexes
+
+Example
+```sql
+-- Query 1
+SHOW INDEX FROM Actors;
+```
+The *cardinality* shows the number of unique values for the primary key. It's also described as an estimate of the number of unique values in the index and may not be exact for smaller tables.
+
+However, if you execute the above query in the console, the cardinality may not come out to be 11. Cardinality is counted based on statistics stored as integers, so the value is not necessarily exact even for small tables.
+
+However, if you execute the following command and then check for cardinality, it should come out to be exact.
+
+All columns that make up the primary key must be non-null.
+```sql
+-- Query 2
+ANALYZE TABLE Actors;
+SHOW INDEX FROM Actors;
+```
+There are two kinds of indexes:
+
+ - Clustered Index
+ - Non-clustered
+
+In the case of a clustered index, the table rows are sorted and kept in a *B-tree structure* (or an R-tree in the case of a spatial index). 
+ - A *page* is the smallest unit of data that a database can write to or read from a disk. A page contains rows and forms the leaf node of the B+ tree. In MySQL the default size of a page is fixed at 16KB though it is configurable.
+ - A collection of pages forms an *extent*.
+ - A collection of extents forms a *segment*.
+ - Segments in turn form a *tablespace*. A tablespace consists of tables and their associated indexes. There is a tablespace called the *system tablespace*, and in older versions of MySQL, all user tables were also part of the system tablespace. With later MySQL versions a configuration can be specified to have a separate tablespace for each user table. 
+
+
+```sql
+-- Query 3
+INSERT INTO Actors (Id, FirstName, SecondName,DoB, Gender, MaritalStatus, NetWorthInMillions) VALUES (15, "First","Row", "1999-01-01", "Male", "Single",0.00);
+INSERT INTO Actors (Id, FirstName, SecondName,DoB, Gender, MaritalStatus, NetWorthInMillions) VALUES (13, "Second","Row", "1999-01-01", "Male", "Single",0.00);
+INSERT INTO Actors (Id, FirstName, SecondName,DoB, Gender, MaritalStatus, NetWorthInMillions) VALUES (12, "Third","Row", "1999-01-01", "Male", "Single",0.00);
+```
+
+
+
 
 
 
