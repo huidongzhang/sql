@@ -226,18 +226,33 @@ SHOW TABLES LIKE "A%";
 Syntax
 ```sql
 SELECT col1, col2, … coln
-
 FROM table
-
 WHERE col3 LIKE "%some-string%"
-
 AND
-
 col4 = 55;
 ```
 Example
 ```sql
-
+-- Query 1
+SELECT * FROM Actors WHERE FirstName > "B" AND NetWorthInMillions > 200;
+-- Query 2
+SELECT * FROM Actors WHERE FirstName > "B" OR NetWorthInMillions > 200;
+-- Query 3
+SELECT * FROM Actors WHERE (FirstName > 'B' AND FirstName < 'J') OR (SecondName >'I' AND SecondName < 'K');
+-- Query 4
+-- The rows matching the two conditions in the parentheses are excluded by the NOT 
+-- and everything else is included. 
+SELECT * FROM Actors WHERE NOT(FirstName > "B" OR NetWorthInMillions > 200);
+-- Query 5
+SELECT * FROM Actors WHERE NOT NetWorthInMillions = 200;
+-- Query 6
+-- Applying NOT on a non-zero column value makes it a zero, 
+-- and since zero isn't equal to 200, no rows are displayed.
+SELECT * FROM Actors WHERE (NOT NetWorthInMillions) = 200;
+-- Query 7
+-- Exclusive OR returns true when one of the two conditions is true. 
+-- If both conditions are true, or both are false, the result of the XOR operations is false.
+SELECT * FROM Actors WHERE FirstName > "B" XOR NetWorthInMillions > 200;
 ```
 
 ### ORDER BY
@@ -248,5 +263,32 @@ FROM table
 WHERE col3 LIKE "%some-string%"
 ORDER BY col3
 ```
+Example
+```sql
+-- Query 1
+SELECT * FROM Actors ORDER BY FirstName;
+-- Query 2
+SELECT * FROM Actors ORDER BY FirstName DESC;
+-- Query 3
+-- If a tie occurs based on the first sort key, it is broken using the second sort key.
+SELECT * FROM Actors ORDER BY NetWorthInMillions, FirstName;
+-- Query 4
+SELECT * FROM Actors ORDER BY NetWorthInMillions, SecondName;
+-- Query 5
+SELECT * FROM Actors ORDER BY NetWorthInMillions DESC, FirstName ASC;
+-- Query 6
+SELECT * FROM Actors ORDER BY NetWorthInMillions DESC, FirstName DESC;
+-- Query 7
+-- MySQL ignores case when comparing strings in the ORDER BY clause, 
+-- which implies strings "Kim", "kIm" and "kim" are treated equally. 
+-- If we want ASCII comparison we need to specify the BINARY keyword before the sort key.
+SELECT * FROM Actors ORDER BY BINARY FirstName;
+-- Query 8
+SELECT * FROM Actors ORDER BY NetWorthInMillions;
+-- Query 9
+-- The CAST function allows us to treat a column as a different type.
+SELECT * FROM Actors ORDER BY CAST(NetWorthInMillions AS CHAR);
+```
+
 
 
