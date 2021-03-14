@@ -147,6 +147,15 @@ INSERT INTO Actors () VALUES ();
 
 -- Query 6
 INSERT INTO Actors SET DoB="1950-12-12", FirstName="Rajnikanth", SecondName="",  Gender="Male", NetWorthInMillions=50,  MaritalStatus="Married";
-
 ```
+
+### ORDER BY
+Syntax
+```sql
+SELECT col1, col2, … coln
+FROM table
+WHERE col3 LIKE "%some-string%"
+ORDER BY col3
+```
+
 
