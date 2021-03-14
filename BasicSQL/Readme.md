@@ -393,10 +393,9 @@ All columns that make up the primary key must be non-null.
 ANALYZE TABLE Actors;
 SHOW INDEX FROM Actors;
 ```
-There are two kinds of indexes:
+There are two kinds of indexes:Clustered Index and Non-clustered Index
 
- - Clustered Index
- - Non-clustered
+##### Clustered Index
 
 In the case of a clustered index, the table rows are sorted and kept in a *B-tree structure* (or an R-tree in the case of a spatial index). 
  - A *page* is the smallest unit of data that a database can write to or read from a disk. A page contains rows and forms the leaf node of the B+ tree. In MySQL the default size of a page is fixed at 16KB though it is configurable.
@@ -404,13 +403,13 @@ In the case of a clustered index, the table rows are sorted and kept in a *B-tre
  - A collection of extents forms a *segment*.
  - Segments in turn form a *tablespace*. A tablespace consists of tables and their associated indexes. There is a tablespace called the *system tablespace*, and in older versions of MySQL, all user tables were also part of the system tablespace. With later MySQL versions a configuration can be specified to have a separate tablespace for each user table. 
 
-
 ```sql
 -- Query 3
 INSERT INTO Actors (Id, FirstName, SecondName,DoB, Gender, MaritalStatus, NetWorthInMillions) VALUES (15, "First","Row", "1999-01-01", "Male", "Single",0.00);
 INSERT INTO Actors (Id, FirstName, SecondName,DoB, Gender, MaritalStatus, NetWorthInMillions) VALUES (13, "Second","Row", "1999-01-01", "Male", "Single",0.00);
 INSERT INTO Actors (Id, FirstName, SecondName,DoB, Gender, MaritalStatus, NetWorthInMillions) VALUES (12, "Third","Row", "1999-01-01", "Male", "Single",0.00);
 ```
+The first row we add appears last and the last row we add appears earlier than the first and the second rows. This is because the rows are retrieved in the order of the index.
 
 
 
