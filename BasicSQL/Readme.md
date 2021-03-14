@@ -290,5 +290,35 @@ SELECT * FROM Actors ORDER BY NetWorthInMillions;
 SELECT * FROM Actors ORDER BY CAST(NetWorthInMillions AS CHAR);
 ```
 
+### LIMIT
+The LIMIT clause allows us to restrict the number of rows returned from the result of a select query.
+Syntax
+```sql
+SELECT col1, col2, … coln
+FROM table
+WHERE col3 LIKE "%some-string%"
+ORDER BY col3
+LIMIT 10;
+```
+Example
+```sql
+-- Query 1
+SELECT FirstName, SecondName from Actors ORDER BY NetWorthInMillions DESC LIMIT 3;
+-- Query 2
+-- retrieve the next 4 richest actors after the top three.
+-- Syntax
+LIMIT <offset>, <number_of_row_to_print>;
+SELECT FirstName, SecondName from Actors ORDER BY NetWorthInMillions DESC LIMIT 4 OFFSET 3;
+-- Query 3
+-- We can also use the alternative syntax as follows:
+SELECT FirstName, SecondName from Actors ORDER BY NetWorthInMillions DESC LIMIT 3,4;
+-- Query 4
+SELECT FirstName, SecondName from Actors ORDER BY NetWorthInMillions DESC LIMIT 1000 OFFSET 3;
+-- Query 5
+-- It is the maximum value that can be stored in MySQL’s unsigned BIGINT variable type.
+ -- Any value higher than that and MySQL will complain: ERROR
+SELECT FirstName, SecondName from Actors ORDER BY NetWorthInMillions DESC LIMIT 18446744073709551616;
+```
+
 
 
