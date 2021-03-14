@@ -202,17 +202,38 @@ SELECT FirstName, SecondName from Actors WHERE NetWorthInMillions > 0;
 ### LIKE Operator
 Syntax
 ```sql
-
+SELECT col1, col2, … coln
+FROM table
+WHERE col3 LIKE "%some-string%"
 ```
 Example
 ```sql
-
+-- Query 1
+SELECT * from Actors WHERE FirstName LIKE "Jen%";
+-- Query 2
+SELECT * from Actors where FirstName LIKE "Jennifer%";
+-- Query 3: this matches all the rows in the table
+SELECT * from Actors where FirstName LIKE "%";
+-- Query 4: use the underscore _ character to match exactly one character
+SELECT * from Actors WHERE FirstName LIKE "_enn%";
+-- Query 5: show database whose name starts with M
+SHOW DATABASES LIKE "M%";
+-- Query 6: show table whose name starts with A
+SHOW TABLES LIKE "A%";
 ```
 
 ### Combining Conditions
 Syntax
 ```sql
+SELECT col1, col2, … coln
 
+FROM table
+
+WHERE col3 LIKE "%some-string%"
+
+AND
+
+col4 = 55;
 ```
 Example
 ```sql
