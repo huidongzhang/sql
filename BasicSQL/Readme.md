@@ -378,7 +378,6 @@ UPDATE Actors SET NetWorthInMillions=50, MaritalStatus="Single";
 
 Example
 ```sql
--- Query 1
 SHOW INDEX FROM Actors;
 ```
 The *cardinality* shows the number of unique values for the primary key. It's also described as an estimate of the number of unique values in the index and may not be exact for smaller tables.
@@ -389,27 +388,53 @@ However, if you execute the following command and then check for cardinality, it
 
 All columns that make up the primary key must be non-null.
 ```sql
--- Query 2
 ANALYZE TABLE Actors;
 SHOW INDEX FROM Actors;
 ```
-There are two kinds of indexes:Clustered Index and Non-clustered Index
+There are two kinds of indexes: Clustered Index and Non-clustered Index
 
-##### Clustered Index
+#### Clustered Index
 
 In the case of a clustered index, the table rows are sorted and kept in a *B-tree structure* (or an R-tree in the case of a spatial index). 
- - A *page* is the smallest unit of data that a database can write to or read from a disk. A page contains rows and forms the leaf node of the B+ tree. In MySQL the default size of a page is fixed at 16KB though it is configurable.
- - A collection of pages forms an *extent*.
- - A collection of extents forms a *segment*.
- - Segments in turn form a *tablespace*. A tablespace consists of tables and their associated indexes. There is a tablespace called the *system tablespace*, and in older versions of MySQL, all user tables were also part of the system tablespace. With later MySQL versions a configuration can be specified to have a separate tablespace for each user table. 
+ - A **page** is the smallest unit of data that a database can write to or read from a disk. A page contains rows and forms the leaf node of the B+ tree. In MySQL the default size of a page is fixed at 16KB though it is configurable.
+ - A collection of pages forms an **extent**.
+ - A collection of extents forms a **segment**.
+ - Segments in turn form a **tablespace**. A tablespace consists of tables and their associated indexes. There is a tablespace called the **system tablespace**, and in older versions of MySQL, all user tables were also part of the system tablespace. With later MySQL versions a configuration can be specified to have a separate tablespace for each user table. 
 
 ```sql
--- Query 3
 INSERT INTO Actors (Id, FirstName, SecondName,DoB, Gender, MaritalStatus, NetWorthInMillions) VALUES (15, "First","Row", "1999-01-01", "Male", "Single",0.00);
 INSERT INTO Actors (Id, FirstName, SecondName,DoB, Gender, MaritalStatus, NetWorthInMillions) VALUES (13, "Second","Row", "1999-01-01", "Male", "Single",0.00);
 INSERT INTO Actors (Id, FirstName, SecondName,DoB, Gender, MaritalStatus, NetWorthInMillions) VALUES (12, "Third","Row", "1999-01-01", "Male", "Single",0.00);
 ```
 The first row we add appears last and the last row we add appears earlier than the first and the second rows. This is because the rows are retrieved in the order of the index.
+
+#### How rows are stored within each page
+The pages of the B-tree split and merge as required. 
+- If a page is full and a new key is inserted, the existing page splits. 
+- Similarly, if enough rows are deleted from a page it may get merged with another. 
+Within a leaf-node page, the records or rows exist as a singly linked-list.
+- The linked list enforces the index order on the rows.
+- The new row is placed in the free space available within the page and the linked list pointers are manipulated to fix the order.
+
+Every table is stored as a clustered index with the primary key as the sort key in MySQL when the database engine is selected as InnoDB.
+
+A **database engine** is the software module that a database management system uses to create, read, update, and delete data from a database.In case of MySQL, we have **InnoDB** and **MyISAM** as examples of two popular storage engines.
+```sql
+SHOW ENGINES;
+```
+
+#### Primary key
+MySQL creates a clustered index on the primary key. 
+
+If no primary key is defined it looks for the first UNIQUE index with all the columns that form the key set as NOT NULL. If no UNIQUE index is available, 
+
+MySQL generates a hidden clustered index named GEN_CLUST_INDEX on a synthetic column containing row ID values. 
+
+The rows are ordered by the ID that gets assigned to each row. 
+
+This also implies that there can only be one clustered index per table as the table rows can only be arranged in one order on the disk. All other indexes are secondary indexes.
+
+
 
 
 
