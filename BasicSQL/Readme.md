@@ -426,17 +426,97 @@ SHOW ENGINES;
 #### Primary key
 MySQL creates a clustered index on the primary key. 
 
-If no primary key is defined it looks for the first UNIQUE index with all the columns that form the key set as NOT NULL. If no UNIQUE index is available, 
+- If no primary key is defined it looks for the first UNIQUE index with all the columns that form the key set as NOT NULL. 
+- If no UNIQUE index is available, MySQL generates a hidden clustered index named `GEN_CLUST_INDEX` on a synthetic column containing row ID values. The rows are ordered by the ID that gets assigned to each row. 
+- This also implies that there can only be one clustered index per table as the table rows can only be arranged in one order on the disk. All other indexes are secondary indexes.
 
-MySQL generates a hidden clustered index named GEN_CLUST_INDEX on a synthetic column containing row ID values. 
+#### Non-clustered Index
 
-The rows are ordered by the ID that gets assigned to each row. 
+In the case of the clustered index, we saw that leaf-nodes consisted of pages that contained the actual data. 
 
-This also implies that there can only be one clustered index per table as the table rows can only be arranged in one order on the disk. All other indexes are secondary indexes.
+On the contrary, in a non-clustered index, the leaf-nodes don't hold the actual data, rather, a pointer to data stored elsewhere on the disk. 
 
+- If the selected database engine is MyISAM then the rows aren't stored in sorted order; rather they appear as a heap without any ordering. 
+- Such a table is called a **heap-table** since it contains an unordered pile of data. The **MyISAM** database engine is based on ISAM (Indexed Sequential Access Method), an indexing algorithm developed by IBM that allows retrieving information from large sets of data in a fast way.
 
+#### Cost of Indexing
+An index doesn't come for free. 
+- It takes up additional disk space.
+- It needs to be modified whenever an insert or an update is made to the table.
 
+### Alterations
+`ALTER TABLE table`, then:`CHANGE`,`MODIFY`,`ADD`,`DROP`
+We can rename tables, add, remove, or rename columns, change type of an existing column, etc.
 
+Syntax
+```sql
+ALTER TABLE table
+CHANGE oldColumnName newColumnName <datatype> <restrictions>;
+```
+
+Example
+```sql
+-- Query 1
+-- rename the column FirstName to First_Name
+ALTER TABLE Actors CHANGE FirstName First_Name varchar(120);
+```
+
+`varchar(n)`
+- SQL Server allocates 1 character space as the default value to the varchar column that is defined without any length. 
+- In practical scenarios, varchar(n) is used to store variable length value as a string.
+- ‘n’ denotes the string length in bytes and it can go up to 8000 characters.
+
+```sql
+-- Query 2
+-- specify the default value for the column First_Name to be the string "Anonymous"
+ALTER TABLE Actors MODIFY First_Name varchar(20) DEFAULT "Anonymous";
+-- Query 3
+ALTER TABLE Actors CHANGE First_Name First_Name varchar(20) DEFAULT "Anonymous";
+```
+- Use the `MODIFY` keyword if we wish to alter the type or the clauses for a column.
+- We can also use the `CHANGE` statement but that will require us to specify the same column name twice as we aren't renaming the column.
+
+```sql
+-- Query 4
+-- if we try to change the first name column from type varchar to int, we'll run into an error
+ALTER TABLE Actors MODIFY First_Name INT;
+
+-- Query 5
+-- we can change the column first name to have a varchar length of 300
+ALTER TABLE Actors MODIFY First_Name varchar(300);
+
+-- Query 6
+-- add a new column MiddleName
+ALTER TABLE Actors ADD MiddleName varchar(100);
+
+-- Query 7
+-- remove the newly added column
+ALTER TABLE Actors DROP MiddleName;
+```
+```sql
+-- Query 8
+-- adds the middle name as the first column
+ALTER TABLE Actors ADD MiddleName varchar(100) FIRST;
+
+-- Query 9
+-- add it after the date of birth (DoB) column
+ALTER TABLE Actors ADD MiddleName varchar(100) AFTER DoB;
+```
+- Control the position of the new column within the table using the `FIRST` or `AFTER` keyword
+- If an index is defined on a column, dropping the column also removes the index, if the index consists of only that one column.
+
+```sql
+--Query 10
+-- drop the middle name column and recreate it using a slightly different column name
+ALTER TABLE Actors DROP MiddleName, ADD Middle_Name varchar(100);
+```
+- Combine several alterations in a single MySQL statement separated by comma. 
+- Combining alterations is much more efficient as it avoids the cost of 
+  - creating a new table
+  - copying data from the old table to the new
+  - dropping the old table
+  - renaming the old table to the new table for each alteration.
+ -  An alter operation can be expensive if the table needs to be rebuilt.
 
 
 
