@@ -172,6 +172,32 @@ SELECT FirstName, SecondName from Actors WHERE NetWorthInMillions > 500;
 -- Query 7
 SELECT FirstName, SecondName from Actors WHERE NetWorthInMillions > 0;
 ```
+|Operator |Purpose|
+|:---|:---|
+|>	|Greater than operator|
+|>=	|Greater than or equal to operator|
+|<	|Less than operator|
+|<=	|Less than or equal to operator|
+|!=	|Not equal operator|
+|<>	|Not equal operator|
+|<=>	|NULL-safe equal to operator|
+|=	|Equal to operator|
+|LIKE	|Simple pattern matching|
+|NOT LIKE	|Negation of simple pattern matching|
+|BETWEEN ... AND ...	|Whether a value is within a range of values|
+|NOT BETWEEN ... AND ...	|Whether a value is not within a range of values|
+|IN	|Whether a value is within a set of values|
+|NOT IN()	|Whether a value is not within a set of values|
+|IS	|Test a value against a boolean|
+|IS NOT	|Test a value against a boolean|
+|IS NULL	|NULL value test|
+|IS NOT NULL	|NOT NULL value test|
+|ISNULL()	|Test whether the argument is NULL|
+|COALESCE()	|Return the first non-NULL argument|
+|GREATEST()	|Return the largest argument|
+|LEAST()	|Return the smallest argument|
+|STRCMP()	|Compare two strings|
+|INTERVAL	|Return the index of the argument that is less than the first argument|
 
 ### LIKE Operator
 Syntax
