@@ -32,13 +32,9 @@ DROP DATABASE MovieIndustry;
 Syntax for creating a table:
 ```sql
 CREATE TABLE tableName (
-
 col1 <dataType> <Restrictions>,
-
 col2 <dataType> <Restrictions>,
-
 col3 <dataType> <Restrictions>,
-
 <Primary Key or Index definitions>);
 ```
 Syntax for defining a column:
@@ -291,7 +287,8 @@ SELECT * FROM Actors ORDER BY CAST(NetWorthInMillions AS CHAR);
 ```
 
 ### LIMIT
-The LIMIT clause allows us to restrict the number of rows returned from the result of a select query.
+The `LIMIT` clause allows us to restrict the number of rows returned from the result of a select query.
+
 Syntax
 ```sql
 SELECT col1, col2, … coln
@@ -347,12 +344,37 @@ DELETE FROM Actors;
 ```
 
 ### TRUNCATE
-If we intend to delete all the rows from a table then a faster route is to use the TRUNCATE statement. Generally, we don't want to delete all the table rows except in the case of temporary tables. The TRUNCATE statement drops a table and recreates it for faster processing. MySQL doesn't count the number of rows affected and may show the count to be zero or non-zero, but the number doesn't reflect the actual number of rows affected.
+If we intend to delete all the rows from a table then a faster route is to use the `TRUNCATE` statement. Generally, we don't want to delete all the table rows except in the case of temporary tables. The TRUNCATE statement drops a table and recreates it for faster processing. MySQL doesn't count the number of rows affected and may show the count to be zero or non-zero, but the number doesn't reflect the actual number of rows affected.
+
 Syntax
 ```sql
 TRUNCATE table
 ```
 TRUNCATE doesn't work with locking or transactions and is the equivalent of DELETE when used with InnoDB tables. InnoDB refers to a particular type of database engine
+
+### UPDATE
+Change the value of a column for a row or multiple rows.
+Two parts: the *matching* phase and then the *modification* phase. 
+Syntax
+```sql
+UPDATE table
+SET col1 = val1, col2 = val2, … coln = valn
+WHERE <condition>
+ORDER BY col5
+LIMIT 5
+```
+Example
+```sql
+-- Query 1
+UPDATE Actors SET NetWorthInMillions=1;
+-- Query 2
+-- only changes the first 3
+UPDATE Actors SET NetWorthInMillions=5 ORDER BY FirstName LIMIT 3;
+--Query 3
+UPDATE Actors SET NetWorthInMillions=50, MaritalStatus="Single";
+
+
+```
 
 
 
