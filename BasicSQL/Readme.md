@@ -151,11 +151,26 @@ INSERT INTO Actors SET DoB="1950-12-12", FirstName="Rajnikanth", SecondName="", 
 ### Querying Data
 Syntax
 ```sql
-
+SELECT col1, col2, … coln
+FROM table
+WHERE <condition>
 ```
 Example
 ```sql
-
+-- Query 1
+SELECT * from Actors;
+-- Query 2
+SELECT <columns> FROM <TableName>
+-- Query 3
+SELECT FirstName, SecondName from Actors;
+-- Query 4
+SELECT FirstName, SecondName from Actors WHERE FirstName="Travolta";
+-- Query 5
+SELECT FirstName, SecondName from Actors WHERE FirstName="Brad";
+-- Query 6
+SELECT FirstName, SecondName from Actors WHERE NetWorthInMillions > 500;
+-- Query 7
+SELECT FirstName, SecondName from Actors WHERE NetWorthInMillions > 0;
 ```
 
 ### LIKE Operator
