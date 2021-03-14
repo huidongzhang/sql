@@ -29,7 +29,7 @@ DROP DATABASE MovieIndustry;
 - Spatial Data represents the location, size, and shape of an object on planet Earth such as a building, lake, mountain, or township. MySQL also supports spatial data types, e.g., GEOMETRY, POINT, etc.
 
 ### Create Table
-- Syntax for creating a table:
+Syntax for creating a table:
 ```sql
 CREATE TABLE tableName (
 
@@ -41,7 +41,7 @@ col3 <dataType> <Restrictions>,
 
 <Primary Key or Index definitions>);
 ```
-- Syntax for defining a column:
+Syntax for defining a column:
 Note that column names are case-insensitive and portable across all operating systems, unlike database names.
 ```sql
 columnName columnType [NOT NULL | NULL][DEFAULT columnValue]
@@ -100,7 +100,7 @@ CREATE TEMPORARY TABLE ActorNames (FirstName CHAR(20));
 ### Collations & Character Sets
 A character set defines what characters MySQL can store.
 A collation set decides how strings are ordered.
-- By default, MySQL uses the `latin-1` character set that has an associated default `latin1_swedish_ci` collation. The `ci` in the name implies case insensitive and the accented characters are sorted using Swedish conventions.
+By default, MySQL uses the `latin-1` character set that has an associated default `latin1_swedish_ci` collation. The `ci` in the name implies case insensitive and the accented characters are sorted using Swedish conventions.
 ```sql
 SHOW CHARACTER SET; /*available character sets on the server*/
 SHOW COLLATION; /*list the collation*/
@@ -345,6 +345,14 @@ DELETE FROM Actors ORDER BY NetWorthInMillions DESC LIMIT 3;
 -- The table can still be queried even after we have removed all the rows from it
 DELETE FROM Actors;
 ```
+
+### TRUNCATE
+If we intend to delete all the rows from a table then a faster route is to use the TRUNCATE statement. Generally, we don't want to delete all the table rows except in the case of temporary tables. The TRUNCATE statement drops a table and recreates it for faster processing. MySQL doesn't count the number of rows affected and may show the count to be zero or non-zero, but the number doesn't reflect the actual number of rows affected.
+Syntax
+```sql
+TRUNCATE table
+```
+TRUNCATE doesn't work with locking or transactions and is the equivalent of DELETE when used with InnoDB tables. InnoDB refers to a particular type of database engine
 
 
 
