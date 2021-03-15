@@ -558,7 +558,7 @@ Syntax
 ALTER TABLE oldTableName
 RENAME newTableName;
 ```
-
+### ALTER or DROP
 Example
 ```sql
 -- Query 1
@@ -573,6 +573,61 @@ DROP TABLE IF EXISTS Table1, Table2, Table3;
 -- Query 4
 DROP DATABASE IF EXISTS MovieIndustry;
 ```
+
+### Alias
+Aliases are like nicknames, a temporary name given to a table or a column to write expressive and readable queries. We can use aliases with columns, tables, and MySQL functions.
+
+Syntax
+```sql
+SELECT col1
+AS aliasCol1
+FROM table;
+```
+
+Example
+```sql
+-- Query 1
+-- the column heading in the output shows the alias PopularName instead of FirstName column.
+SELECT FirstName AS PopularName from Actors;
+
+-- Query 2
+-- use the concat function to print the full name
+SELECT CONCAT(FirstName,' ', SecondName) AS FullName FROM Actors;
+
+-- Query 3
+SELECT CONCAT(FirstName,' ', SecondName) AS FullName FROM Actors ORDER BY FullName;
+
+-- Query 4
+-- Without using the alias feature the same query would be written as follows:
+SELECT CONCAT(FirstName,' ', SecondName) FROM Actors ORDER BY CONCAT(FirstName,' ', SecondName);
+```
+- Aliases can be used in `GROUP BY`, `HAVING`, and `ORDER BY` clauses. 
+- Notably, aliases for columns can't be used in the `WHERE` clause but aliases for table can, as shown next.
+- Table aliases come in handy when working with complex queries that involve joins
+```sql
+-- Query 5
+SELECT FirstName FROM Actors AS tbl WHERE tbl.FirstName='Brad' AND tbl.NetWorthInMillions > 200;
+```
+We can also use the table alias in the `SELECT` clause before we actually define the alias. We rewrite the previous query and use the alias in the `SELECT` clause as follows:
+```sql
+-- Query 6
+SELECT tbl.FirstName FROM Actors AS tbl WHERE tbl.FirstName='Brad' AND tbl.NetWorthInMillions > 200;
+```
+
+#### For some queries table aliases are inevitable
+we can alias the Actors table twice to find out all the actors with the same net worth in a single query. 
+- Think of picking each row and comparing it with the rest of the rows in the table to find two rows with the same NetWorthInMillions column. 
+- - However, the caveat is that we want to skip the row when it tries to match with itself.
+```sql
+-- Query 7
+SELECT t1.FirstName, t1.NetworthInMillions
+FROM Actors AS t1,
+Actors AS t2
+WHERE t1.NetworthInMillions = t2.NetworthInMillions
+AND t1.Id != t2.Id;
+```
+
+
 
 
 
