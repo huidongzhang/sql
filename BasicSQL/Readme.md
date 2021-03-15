@@ -553,6 +553,26 @@ DESC Movies;
 ALTER TABLE Movies DROP PRIMARY KEY;
 ALTER TABLE Movies ADD PRIMARY KEY (Released);
 ```
+Syntax
+```sql
+ALTER TABLE oldTableName
+RENAME newTableName;
+```
+
+Example
+```sql
+-- Query 1
+ALTER TABLE Actors RENAME ActorsTable;
+
+-- Query 2
+DROP TABLE IF EXISTS ActorsTable;
+
+-- Query 3
+DROP TABLE IF EXISTS Table1, Table2, Table3;
+
+-- Query 4
+DROP DATABASE IF EXISTS MovieIndustry;
+```
 
 
 
