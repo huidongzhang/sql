@@ -627,6 +627,86 @@ WHERE t1.NetworthInMillions = t2.NetworthInMillions
 AND t1.Id != t2.Id;
 ```
 
+### DISTINCT
+- Output unique rows in a result set. 
+- Remember DISTINCT is a post processing filter, meaning it is applied to the resulting rows of a query.
+Syntax
+```sql
+SELECT DISTINCT col1
+FROM table;
+```
+Example
+```sql
+-- Query 1
+SELECT DISTINCT MaritalStatus from Actors;
+-- Query 2
+SELECT DISTINCT MaritalStatus, FirstName from Actors;
+```
+
+### Aggregate Methods
+Syntax
+```sql
+SELECT AggregateFunction(col1)
+FROM table;
+```
+
+Example
+```sql
+-- Query 1
+-- the output of the query is a single value rather than rows.
+SELECT COUNT(*) FROM Actors;
+-- Query 2
+-- add up the numeric values of a column
+SELECT SUM(NetworthInMillions) FROM Actors;
+-- Query 3
+SELECT AVG(NetWorthInMillions) FROM Actors;
+-- Query 4
+SELECT MIN(NetWorthInMillions) FROM Actors;
+-- Query 5
+SELECT MAX(NetWorthInMillions) FROM Actors;
+-- Query 6
+SELECT STDDEV(NetWorthInMillions) FROM Actors;
+```
+We can also apply the MIN and MAX functions to non-numerical columns such as FirstName. MySQL would return the actor with the first name that occurs first or last.
+
+### GROUP BY
+- Sorts rows together into groups. Returns one row for each group. 
+- Data is organized using a comma separated list of columns as the criteria specified after the `GROUP BY` clause. 
+- Often used with aggregate functions such as `COUNT`, `MAX`, `MIN`, `SUM`, and `AVG` to calculate an aggregated stat for each group.
+- Must appear after the `FROM` and `WHERE` clauses and is also evaluated after them. 
+- However, `GROUP BY` is evaluated before the ORDER BY, LIMIT, and HAVING clauses.
+Syntax
+```sql
+SELECT col1, AggregateFunction(col3)
+FROM table;
+GROUP BY col1, col2, … coln
+ORDER BY col2;
+```
+Example
+```sql
+-- Query 1
+SELECT FirstName FROM Actors GROUP BY FirstName;
+
+-- Query 2
+-- This returns an error.
+SELECT FirstName, SecondName FROM Actors GROUP BY FirstName;
+```
+- We can't have non-aggregated columns in the `SELECT`, `ORDER BY`, and `HAVING` clauses when these columns don't appear in the `GROUP BY` clause or are functionally dependent on columns that do appear. 
+- Though there are exceptions, when the non-aggregated column has a single value it can appear in the `SELECT`, `ORDER BY`, and `HAVING` clauses. 
+  - This restriction is ensured by setting `sql_mode` to `only_full_group_by`. 
+  - We can unset this setting and retry our query, but the value chosen for SecondName would be arbitrary if multiple actors share the same first name.
+```sql
+-- Query 3
+SELECT Gender, COUNT(*) FROM Actors GROUP BY Gender;
+
+-- Query 4
+SELECT Gender FROM Actors GROUP BY Gender;
+
+-- Query 5
+SELECT MaritalStatus, AVG(NetworthInMillions) FROM Actors GROUP BY MaritalStatus ORDER BY MaritalStatus ASC;
+```
+
+
 
 
 
