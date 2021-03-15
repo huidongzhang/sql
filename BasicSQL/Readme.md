@@ -697,18 +697,59 @@ SELECT FirstName, SecondName FROM Actors GROUP BY FirstName;
   - We can unset this setting and retry our query, but the value chosen for SecondName would be arbitrary if multiple actors share the same first name.
 ```sql
 -- Query 3
+-- find the number of male and female actors
 SELECT Gender, COUNT(*) FROM Actors GROUP BY Gender;
 
 -- Query 4
+-- If we don't ask for the count, the query will return the two groups it finds.
 SELECT Gender FROM Actors GROUP BY Gender;
 
 -- Query 5
+-- find the average net worth of actors according to their marital status as follows:
 SELECT MaritalStatus, AVG(NetworthInMillions) FROM Actors GROUP BY MaritalStatus ORDER BY MaritalStatus ASC;
 ```
 
+### HAVING
+- The `HAVING` clause allows us to filter groups. 
+- At times, the HAVING clause can be used to filter rows to display but that is not the intended use and can make the query **slower**. 
+- The `HAVING` clause should be used to decide what rows form each group. 
+- Remember the `HAVING` clause works on **groups of rows** whereas the `WHERE` clause works on individual rows. 
 
+Syntax
+```sql
+SELECT col1, AggregateFunction(col3) AS count
+FROM table
+GROUP BY col1, col2, … coln
+HAVING count > 75
+ORDER BY col2;
+```
+Example
+```sql
+-- Query 1
+-- we only see those groups whose net worth is either greater than 450 million or less than 250 million.
+-- we define an alias for the function result 
+-- so that we don't have to rewrite the function in the conditions for the HAVING clause.
+SELECT MaritalStatus, AVG(NetworthInMillions) AS NetWorth 
+FROM Actors 
+GROUP BY MaritalStatus 
+HAVING NetWorth > 450 OR NetWorth < 250;
+---
+- Usually, the HAVING clause is used with aggregate functions. 
+- If you find yourself writing a `HAVING` clause that uses a column or expression that isn’t in the SELECT clause, it is likely you should be using the `WHERE` clause instead.
+- 
+---sql
+-- Query 2
+-- should not use HAVING here
+SELECT MaritalStatus, AVG(NetworthInMillions) AS NetWorth 
+FROM Actors 
+GROUP BY MaritalStatus 
+HAVING MaritalStatus='Married';
 
-
+-- Query 3
+SELECT MaritalStatus, AVG(NetworthInMillions) AS NetWorth 
+FROM Actors WHERE MaritalStatus='Married' 
+GROUP BY MaritalStatus;
+```
 
 
 
