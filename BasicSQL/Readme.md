@@ -518,6 +518,43 @@ ALTER TABLE Actors DROP MiddleName, ADD Middle_Name varchar(100);
   - renaming the old table to the new table for each alteration.
  -  An alter operation can be expensive if the table needs to be rebuilt.
 
+### Alter Index
+We can add, remove, or modify indexes after the application is deployed. Note that modifying indexes doesn't change the data in the table.
+
+Syntax
+```sql
+ALTER TABLE table
+ADD INDEX indexName (col1, col2, … coln);
+```
+
+Example
+```sql
+-- Query 1
+ALTER TABLE Actors ADD INDEX nameIndex (FirstName);
+
+-- Query 2
+ALTER TABLE Actors ADD INDEX nameIndexWithOnlyTenChars (FirstName(10));
+
+-- Query 3
+ALTER TABLE Actors DROP INDEX nameIndex;
+
+-- Query 4
+ALTER TABLE Actors DROP PRIMARY KEY;
+```
+- We can't add a second primary key to a table that already has a primary key. 
+- However, we can drop the existing primary key and declare a new one on the table. 
+- In the case of the Actors table, we can't drop the primary key ID as it is an auto_increment column and an auto_increment column must also be the primary key.
+- Attempting to drop the ID column as the primary key results in an error.
+- 
+```sql
+-- Query 5
+CREATE TABLE Movies (Name VARCHAR(100), Released DATE, PRIMARY KEY (Name));
+DESC Movies;
+ALTER TABLE Movies DROP PRIMARY KEY;
+ALTER TABLE Movies ADD PRIMARY KEY (Released);
+```
+
+
 
 
 
