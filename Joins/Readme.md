@@ -276,7 +276,7 @@ FROM Actors
 NATURAL JOIN DigitalAssets;
 
 -- Query 4
--- same as Query 3
+-- same as Query 3 after alter ActorId in Digital Assets to Id
 SELECT FirstName, SecondName, AssetType, URL
 FROM Actors 
 INNER JOIN DigitalAssets USING (Id);
