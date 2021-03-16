@@ -66,23 +66,29 @@ USING(Id);
 ```
 - Note that the columns listed in the `SELECT` clause are unique across the two tables. 
 - However, if the two tables had columns with the same names then we would need to disambiguate the two by fully qualifying the column with the table name.
-
+- Think of it asan intersection of the two tables based on the IDs of the celebrities.
 
 ```sql
 -- Query 3
 SELECT FirstName, SecondName, AssetType, URL 
 FROM Actors, DigitalAssets 
 WHERE ActorId=Id;
-
+```
+- There's no difference in using the WHERE clause or the INNER JOIN clause in query performance
+```sql
 -- Query 4
+-- create a cartesian product between the two tables as we did in the self join section
 SELECT FirstName, SecondName, AssetType, URL 
 FROM Actors, DigitalAssets;
 
 -- Query 5
+-- or 
 SELECT FirstName, SecondName, AssetType, URL 
 FROM Actors 
 INNER JOIN DigitalAssets;
-
+```
+Both the following queries result in empty sets.
+```sql
 -- Query 6
 -- Makes no sense to join tables on FirstName and URL columns as they aren't related. 
 SELECT * 
