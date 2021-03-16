@@ -48,17 +48,27 @@ Example
 ```sql
 -- Query 1
 -- listing the Facebook pages for each celebrity
+-- Each table in isolation can't answer this query as the 
+-- Actors table doesn't hold the digital assets information for each actor and the 
+-- DigitalAssets table doesn't hold the names for each actor.
 SELECT FirstName, SecondName, AssetType, URL
 FROM Actors 
 INNER JOIN DigitalAssets  
 ON Actors.Id = DigitalAssets.ActorID;
 
 -- Query 2
+-- If the two tables had the same column name for the actor's ID 
+-- then we could have used the alternative syntax with USING clause
 SELECT FirstName, SecondName, AssetType, URL 
 FROM Actors 
 INNER JOIN DigitalAssets 
 USING(Id);
+```
+- Note that the columns listed in the `SELECT` clause are unique across the two tables. 
+- However, if the two tables had columns with the same names then we would need to disambiguate the two by fully qualifying the column with the table name.
 
+
+```sql
 -- Query 3
 SELECT FirstName, SecondName, AssetType, URL 
 FROM Actors, DigitalAssets 
