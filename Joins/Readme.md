@@ -170,7 +170,7 @@ SELECT MaritalStatus FROM Actors
 UNION ALL
 SELECT Gender FROM Actors;
 ```
-Iy may ignore the `ORDER BY` clause when used without the `LIMIT` clause in a subquery.
+It may ignore the `ORDER BY` clause when used without the `LIMIT` clause in a subquery.
 ```sql
 -- Query 7
 -- this does not order the networth, even though we asked ASC
@@ -194,5 +194,102 @@ ORDER BY NetworthInMillions ASC LIMIT 3);
 ```
 - Note, the types of the two columns in the result set aren't the same.
 - The query works because MySQL converts the `int` to `varchar`.
+
+### Left and Right Joins
+Syntax
+```sql
+-- Left Join
+SELECT *
+FROM table1
+LEFT [OUTER] JOIN table2
+ON <join condition>
+
+-- Right Join
+SELECT *
+FROM table1
+RIGHT [OUTER] JOIN table2
+ON <join condition>
+```
+The `LEFT JOIN` includes those rows from the table on its left that don't match with rows in the table to its right.
+
+Example
+```sql
+-- Query 1
+-- the inner join query only outputs celebrities who have a digital presence. 
+-- If we use the LEFT JOIN instead, we'll get a list of all the actors with or without digital presence.
+-- Note that the output now includes those actors who don't have a digital presence. (NULL)
+SELECT FirstName, SecondName, AssetType, URL
+FROM Actors 
+LEFT JOIN DigitalAssets  
+ON Actors.Id = DigitalAssets.ActorID;
+
+-- Query 2
+-- If we flip the order of the two tables in the query we get a different result
+-- Note that actors without digital presence are left out.
+SELECT FirstName, SecondName, AssetType, URL
+FROM DigitalAssets 
+LEFT JOIN Actors
+ON Actors.Id = DigitalAssets.ActorID;
+
+-- Query 3
+-- this is the same as Query 2
+SELECT FirstName, SecondName, AssetType, URL
+FROM Actors 
+RIGHT JOIN DigitalAssets  
+ON Actors.Id = DigitalAssets.ActorID;
+```
+
+- Note that an alternative syntax for left and right joins is `LEFT OUTER JOIN` and `RIGHT OUTER JOIN` respectively, though there's no difference in functionality if you skip the `OUTER` keyword.
+
+### Natural Join
+Find the natural join between participating tables by **matching on columns with same name**.
+
+Performs an inner join of the participating tables essentially without the user having to specify the matching columns. 
+
+Syntax
+```sql
+SELECT *
+FROM table1
+NATURAL JOIN table2
+```
+Example
+```sql
+-- Query 1
+-- since none of the columns in the two tables share the same name, the result is a cartesian product.
+SELECT FirstName, SecondName, AssetType, URL
+FROM Actors 
+NATURAL JOIN DigitalAssets;
+
+-- Query 2
+-- the same as Query 1
+SELECT FirstName, SecondName, AssetType, URL
+FROM Actors 
+INNER JOIN DigitalAssets;
+
+-- Query 3
+-- now the server matched the columns with the same name in both the tables
+-- Alter the column name
+ALTER TABLE DigitalAssets CHANGE ActorId Id INT;
+-- rerun the previous query
+SELECT FirstName, SecondName, AssetType, URL
+FROM Actors 
+NATURAL JOIN DigitalAssets;
+
+-- Query 4
+-- same as Query 3
+SELECT FirstName, SecondName, AssetType, URL
+FROM Actors 
+INNER JOIN DigitalAssets USING (Id);
+
+-- Query 5
+SELECT FirstName, SecondName, AssetType, URL
+FROM Actors 
+NATURAL LEFT OUTER JOIN DigitalAssets;
+```
+- Ideally, we should **write expressive queries and avoid using the natural join** as it hides the columns that'll be used for the join and can subtly introduce bugs. 
+- Imagine a situation where a table is altered to have an additional column that has the same name as a column in another table which is naturally joined with the first table in an existing query. Suddenly, the results from the natural join query will stop to make sense.
+
+
+
 
 
