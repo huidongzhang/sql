@@ -103,3 +103,96 @@ INNER JOIN DigitalAssets
 ON NetWorthInMillions = ActorId;
 ```
 
+### Union
+Combine the results from several queries together. 
+
+The clause doesn't join the table but merely clubs the two results together.
+
+Syntax
+```sql
+<Query1>
+UNION
+<Query2>
+```
+
+Example
+```sql
+-- Query 1
+-- prints all the first names from the Actors table and all the URLs from the DigitalAssets table
+-- in the output, the culumn name URL is ignored
+SELECT FirstName FROM Actors 
+UNION 
+SELECT URL FROM DigitalAssets;
+
+-- Query 2
+-- print the top two richest actors and the least two richest
+-- The alias from the second query is ignored in the output
+-- Wrap the two queries in parentheses which is a requirement when using the order by or limit clause in subqueries of a union query
+(SELECT CONCAT(FirstName, ' ', SecondName) AS "Actor Name" 
+FROM Actors 
+ORDER BY NetworthInMillions DESC 
+LIMIT 2)
+UNION
+(SELECT CONCAT(FirstName, ' ', SecondName) AS "ThisAliasIsIgnored" 
+FROM Actors 
+ORDER BY NetworthInMillions ASC 
+LIMIT 2);
+```
+When using the `UNION` clause, the two result sets being combined should have the **same number and order of columns**. The columns from the result sets should be of the **same type or types that are compatible**. 
+
+For instance, the following query will error out:
+```sql
+-- Query 3
+SELECT FirstName, Id FROM Actors 
+UNION 
+SELECT FirstName FROM Actors;
+```
+To make the above query work, we can insert a **fake column or null** as follows:
+```sql
+-- Query 4
+SELECT FirstName, Id FROM Actors 
+UNION 
+SELECT FirstName, null FROM Actors;
+```
+Note that the union clause **doesn't output duplicate values** and works similarly to the distinct clause. 
+
+If we want duplicate values to be included in the query result, we need to use the `UNION ALL` clause as follows:
+```sql
+-- Query 5
+-- this only outputs 5 distinct values: single, married, divorced, male, female
+SELECT MaritalStatus FROM Actors 
+UNION 
+SELECT Gender FROM Actors;
+
+-- Query 6
+--  this outputs all the rows in the two columns
+SELECT MaritalStatus FROM Actors 
+UNION ALL
+SELECT Gender FROM Actors;
+```
+Iy may ignore the `ORDER BY` clause when used without the `LIMIT` clause in a subquery.
+```sql
+-- Query 7
+-- this does not order the networth, even though we asked ASC
+(SELECT CONCAT(FirstName, ' ', SecondName) AS "Actor Name"  
+FROM Actors  
+ORDER BY NetworthInMillions DESC  LIMIT 2)  
+UNION  
+(SELECT NetworthInMillions 
+FROM Actors 
+ORDER BY NetworthInMillions ASC);
+
+-- Query 8
+-- this orders the networth, as we set a LIMIT
+(SELECT CONCAT(FirstName, ' ', SecondName) AS "Actor Name"  
+FROM Actors  
+ORDER BY NetworthInMillions DESC  LIMIT 2)  
+UNION  
+(SELECT NetworthInMillions 
+FROM Actors 
+ORDER BY NetworthInMillions ASC LIMIT 3);
+```
+- Note, the types of the two columns in the result set aren't the same.
+- The query works because MySQL converts the `int` to `varchar`.
+
+
