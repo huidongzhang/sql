@@ -1,4 +1,4 @@
-### Nrested Scalar Queries
+### Nested Scalar Queries
 A query within another query. 
 
 With the ability to nest a query, we can combine queries to get the desired result in a single uber query rather than executing each constituent query individually. 
