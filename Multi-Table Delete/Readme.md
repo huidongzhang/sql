@@ -84,6 +84,8 @@ WHERE <condition1>
 Example
 ```sql
 -- Query 1
+-- converts the FirstName and SecondName strings stored in the Actors table to upper case for those actors who are on Facebook, 
+-- and at the same time we also want to convert the associated Facebook URL to uppercase.
 UPDATE 
 Actors INNER JOIN DigitalAssets 
 ON Id = ActorId 
@@ -91,11 +93,14 @@ SET FirstName = UPPER(FirstName), SecondName = UPPER(SecondName), URL = UPPER(UR
 WHERE AssetType = "Facebook";
 
 -- Query 2
+-- an alternative 
 UPDATE  Actors, DigitalAssets
 SET FirstName = UPPER(FirstName), SecondName = UPPER(SecondName), URL = UPPER(URL) 
 WHERE AssetType = "Facebook"
 AND ActorId = Id;
 ```
+- Similarly to multi delete, we can't update a table that is also being read from in a subquery.
 
+- `ORDER BY` and `LIMIT` clauses can't be used with multi table deletes.
 
 
