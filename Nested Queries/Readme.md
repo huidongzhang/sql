@@ -156,3 +156,32 @@ ORDER BY LastUpdatedOn DESC LIMIT 1;
 ```
 - When the result of an inner query is used as a derived table, MySQL requires us to provide an alias for the table.
 - Note, in the `FROM` clause we could have just as well used the DigitalAssets table instead of plugging in a nested query.
+
+### EXISTS Operator
+Test if a subquery returns any rows or none at all.
+
+Example
+```sql
+-- Query 1
+-- check if our table DigitalAssets has any account owned by the actor George Clooney. 
+-- If yes, we print the list of all the actors from our Actors table.
+-- otherwise, return an empty set
+SELECT *
+FROM Actors
+WHERE EXISTS ( SELECT * 
+               FROM DigitalAssets
+               WHERE BINARY URL LIKE "%clooney%"); 
+```
+Note we have used the `BINARY` operator to make the comparison **case-insensitive** which is not required if the collation is already set to be case-insensitive for the database.
+
+```sql
+
+-- Query 2
+-- We add the NOT operator to the EXISTS clause and see the entire Actors table print out.
+SELECT *
+FROM Actors
+WHERE NOT EXISTS ( SELECT * 
+               FROM DigitalAssets
+               WHERE BINARY URL LIKE "%clooney%"); 
+```
+
