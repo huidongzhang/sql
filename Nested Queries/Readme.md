@@ -155,4 +155,4 @@ WHERE FirstName = "Kim"
 ORDER BY LastUpdatedOn DESC LIMIT 1;
 ```
 - When the result of an inner query is used as a derived table, MySQL requires us to provide an alias for the table.
-- Note, in the FROM clause we could have just as well used the DigitalAssets table instead of plugging in a nested query.
+- Note, in the `FROM` clause we could have just as well used the DigitalAssets table instead of plugging in a nested query.
