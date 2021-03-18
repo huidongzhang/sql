@@ -318,4 +318,77 @@ VALUES (DEFAULT, 'Young', 'Actor', '2000-01-01', 'Male', 'Single', DEFAULT);
   - At that time ActorsView2 had a `CASCADED` check option and MYSQL checked the age restriction of underlying ActorsView1. 
   - Now ActorsView2 has a `LOCAL` check option. Hence MYSQL inserts the record without checking the rule of ActorsView1 (age>40).
 
+### Drop, Show, & Rename Views
+Two ways to list all views in a database; 
+- one is the `SHOW FULL TABLES` command 
+- and the other is querying the **information_schema** database. 
 
+The `DROP VIEW` command is used to delete a view from the database. 
+
+A view can be renamed in two ways. 
+- One is by using the `RENAME TABLE` command 
+- and the other is by deleting and recreating.
+
+Syntax
+```sql
+SHOW FULL TABLES
+{FROM | IN} db_name
+WHERE table_type = ‘VIEW’
+LIKE pattern;
+
+DROP VIEW [IF EXISTS] view1, view2,…viewn;
+
+RENAME TABLE old_name
+TO new_name;
+```
+
+Example
+```sql
+-- Query 1
+-- show only the views in a database. 
+-- The FROM | IN clause is optional and can be used to see the views from another database.
+SHOW FULL TABLES
+WHERE table_type = 'VIEW';
+
+-- Query 2
+-- The LIKE operator can be used to shortlist views based on a word or pattern.
+SHOW FULL TABLES
+LIKE '%Actor%';
+
+-- Query 3
+-- The information_schema database is a catalogue of all MYSQL databases 
+-- and contains metadata such as database names, tables, privileges, and datatypes of columns, etc. 
+-- A query against this database can also list all views of a particular database 
+SELECT table_name
+FROM information_schema.TABLES
+WHERE table_type = 'VIEW'
+AND table_schema = 'MovieIndustry';
+
+-- Query 4
+-- delete one or more views at a time
+DROP VIEW DigitalAssetCount, ActorAssets;
+
+-- Query 5
+-- In the absence of the IF EXISTS clause, MYSQL gives an error if the view to be dropped does not exist. 
+-- With this clause, a warning is generated if a view we wish to delete is not found in the database. 
+DROP VIEW IF EXISTS DigitalAssetCount, ActorAssets;
+
+-- Query 6
+- create a view 
+CREATE VIEW ActorAge AS
+SELECT * 
+FROM Actors 
+WHERE TIMESTAMPDIFF(YEAR, DoB, CURDATE()) > 50;
+
+-- Query 7
+-- Views are stored in the same namespace as tables, 
+-- hence, the RENAME TABLE command can be used for renaming views. 
+-- change its name to ActorsOlderThan50.
+RENAME TABLE ActorAge
+TO ActorsOlderThan50;
+```
+- There is another method to change the name of a view without using the RENAME clause. 
+  - First, copy the query used to create the view, 
+  - then drop the view, 
+  - and lastly create a new one from the DDL copied in the first step. 
+  The SHOW CREATE VIEW query is used to show the DDL of the view.
