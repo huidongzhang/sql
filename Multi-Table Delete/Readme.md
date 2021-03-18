@@ -206,6 +206,7 @@ VALUES (3);
 ```sql
 -- Query 3
 -- this returns an error
+REPLACE INTO  Actors 
 SET id = (SELECT Id 
           FROM Actors 
           WHERE FirstName="Brad");
