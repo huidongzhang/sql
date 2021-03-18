@@ -103,4 +103,67 @@ AND ActorId = Id;
 
 - `ORDER BY` and `LIMIT` clauses can't be used with multi table deletes.
 
+### SELECT and INSERT
+Syntax to Insert in an Existing Table
+```sql
+INSERT INTO table1 (col1, col2)
+SELECT col3, col4
+FROM table2;
+```
+Syntax to Insert in a New Table
+```sql
+CREATE TABLE newTable (col1 <datatype>, <col2>)
+SELECT col3, col4
+FROM table2;
+```
+Example
+```sql
+-- populate data into a table from another table using INSERT and SELECT in a single query.
+-- Query 1
+-- create a table of all the second names of actors
+CREATE TABLE Names (name VARCHAR(20),
+                    PRIMARY KEY(name));
+
+-- Query 2
+INSERT INTO Names(name) 
+SELECT SecondName FROM Actors;
+```
+- Note that in creating the table Names we have set the only column as the primary key.
+- Trying to add a duplicate rows result in an error. 
+- MySQL provides a way to bypass this error and continue execution using the `IGNORE` clause. 
+- It doesn't mean a duplicate row is added to the table, rather it means that MySQL issues a **warning** instead of issuing an error and aborting.
+
+```sql
+-- Query 3
+-- This query finishes successfully but informs the user about the duplicate row. 
+-- Both the duplicate and warning counts read one.
+INSERT IGNORE INTO Names(name) 
+SELECT SecondName 
+FROM Actors WHERE Id = 1;
+```
+We can do both tasks in one shot.
+```sql
+-- Query 4
+CREATE TABLE MyTempTable SELECT * FROM Actors;
+```
+- We get a copy of the data with the above query but table we create doesn't inherit the primary key constraints. 
+- In fact, creating and copying data as above will not create foreign or primary key constraints on the copy table.
+
+All the modifiers that can be used in a stand-alone create table statement can also be used in a combined create and populate table statement.
+```sql
+-- Query 5
+CREATE TABLE NamesWithDoBs ( 
+Id INT AUTO_INCREMENT,
+Name VARCHAR(20) NOT NULL DEFAULT "unknown",  
+DoB DATE,  
+PRIMARY KEY(Id), KEY(Name), KEY(DoB))  SELECT FirstName, DoB FROM Actors;
+```
+
+We can also create a copy of an existing table without the data using the `LIKE` operator. 
+```sql
+-- Query 6
+CREATE TABLE CopyOfActors LIKE Actors;
+```
+- The copy table doesn't contain any data, but its structure is exactly the same as the source table. 
+- The primary keys and any indexes defined on the source table are also defined on the copy table.
 
