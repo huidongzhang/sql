@@ -167,3 +167,49 @@ CREATE TABLE CopyOfActors LIKE Actors;
 - The copy table doesn't contain any data, but its structure is exactly the same as the source table. 
 - The primary keys and any indexes defined on the source table are also defined on the copy table.
 
+### REPLACE 
+`REPLACE` is much like the `INSERT` statement with one key difference: we can't insert a row if a table already contains a row with the same primary key. 
+
+However, `REPLACE` allows us the convenience of adding a row with the same primary key as an existing row in the table. 
+
+Under the hood, `REPLACE` deletes the row and then adds the new row thereby maintaining the primary key constraint at all times. Sure, we can also use the `UPDATE` clause to achieve the same effect. 
+
+However, `REPLACE` can be useful in automated scripts where **it is not known ahead of time if a particular table already contains a particular primary key**. If it doesn't, the replacement behaves like an insertion, otherwise, it deletes and writes in the new row with the same primary key.
+
+Syntax
+```sql
+REPLACE INTO table (col1, col2, … coln)
+VALUES (val1, val2, … valn)
+WHERE <condition>
+```
+
+Example
+```sql
+-- Query 1
+-- the output of the replace query says 2 rows affected, which implies one row was deleted and a second was inserted.
+REPLACE INTO
+Actors (Id, FirstName, SecondName,DoB, Gender, MaritalStatus, NetworthInMillions)
+VALUES (3, "George", "Clooney", "1961-05-06","Male", "Married", 500.00);
+
+-- Query 2
+-- repeat the previous query but only provide the value for the primary key column and observe the outcome.
+-- the rest of the columns not specified in the query end up taking the default value which is NULL.
+REPLACE INTO 
+Actors (Id)
+VALUES (3);
+```
+- If a table doesn't have a **primary key** defined, `REPLACE` behaves exactly like an `INSERT`. Without a primary key `REPLACE` can't uniquely identify a row to replace.
+
+- Remember that when inserting the duplicate row using the `INSERT IGNORE` clause, the duplicate row is ignored and not added to the table 
+- Whereas when using REPLACE the existing row is deleted and the duplicate row is added to the table.
+
+```sql
+-- Query 3
+-- this returns an error
+SET id = (SELECT Id 
+          FROM Actors 
+          WHERE FirstName="Brad");
+```
+- Similar to multi-delete and update, we can't replace into a table that is also being read from a subquery.
+REPLACE INTO  Actors
+
