@@ -205,7 +205,7 @@ VALUES (3);
 
 ```sql
 -- Query 3
--- this returns an error
+-- replaces the ID of a row with itself gives an error
 REPLACE INTO  Actors 
 SET id = (SELECT Id 
           FROM Actors 
