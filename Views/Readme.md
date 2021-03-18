@@ -89,3 +89,57 @@ SELECT ActorName, Age, NetWorthInMillions
     FROM ActorDetails
     ORDER BY Age DESC;
 ```
+
+### Updateable Views
+Views are not only used to query data; they can also be used to update data in the underlying tables. 
+
+It is possible to insert or update rows in the base table, and in the same vein, delete rows from the table using an updatable view. 
+
+In order for a view to become updatable, it must abide by certain conditions:
+- If the `SELECT` query that creates the view has aggregate functions (`MAX`, `MIN`, `COUNT`, `SUM`, etc.), `DISTINCT` keyword, `LEFT JOIN` or `GROUP BY`, `HAVING`, and `UNION` clauses, the resulting view will not be updatable. 
+- Similarly, a subquery that refers to the same table that appears in the `FROM` clause prohibits updates to the base table.
+
+Syntax
+```sql
+UPDATE view
+SET col1 = value1, col2 = value2,…coln = valuen
+WHERE <condition>
+```
+
+Example
+```sql
+-- Query 1
+-- creating a simple view to show the Actor names and their net worth
+CREATE VIEW ActorView AS
+SELECT Id, FirstName, SecondName, NetWorthInMillions 
+FROM Actors;
+
+-- Query 2
+-- update the net worth of Brad Pitt to 250 million dollars
+-- The change is visible in the view as well as the underlying Actors table
+UPDATE ActorView 
+SET 
+NetWorthInMillions = 250 
+WHERE 
+Id =1;
+```
+To find out which views in the database are updatable we can query the views table in the **information_schema** database. 
+
+This table has a column **is_updatable** that indicates the type of view. Execute the following query to find out the updatable views in the MovieIndustry database:
+```sql
+-- Query 3
+-- It shows the name and is_updatable columns of all the tables and views in the database
+SELECT Table_name, is_updatable
+FROM information_schema.views
+WHERE table_schema = 'MovieIndustry';
+```
+- The database contains five views we created in the last lesson as well as the one created above. 
+- We can see that the DigitalAssetCount view is not updatable because the aggregate `COUNT` function was used in its creation. 
+- Rest of the views created so far are updatable views.
+```sql
+-- Query 4
+-- delete the actor details corresponding to Id number 11.
+-- it also delete the row in underlying table
+DELETE FROM ActorView
+WHERE Id = 11;
+```
