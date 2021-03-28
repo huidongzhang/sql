@@ -83,3 +83,55 @@ WHERE routine_type = 'PROCEDURE'
 -- Query 6        
 DROP PROCEDURE IF EXISTS ShowActors;
 ```
+
+### Variables
+A variable is nothing but a data object with a name associated to it. Variables help store a user-defined, temporary value which can be referred to in subsequent statements.
+
+A variable must be declared before it can be used in the code. The `DECLARE` keyword is used to declare variables by providing the data type and an optional default value. If `DEFAULT` is not used at the time of declaration, then the variable will have `NULL` value.
+
+Assignment of a value to a variable is done using the `SET` keyword. Another way to assign values to a variable is to use it in a query with a `SELECT INTO` statement.
+
+The **scope of a variable** defines its lifetime after which it becomes unavailable. The scope of a variable created in a stored procedure is local meaning that it will not be accessible after the `END` statement of the stored procedure. Inside the stored procedure, the scope of a variable depends on where it is declared. This means we can have multiple variables of the same name in a stored procedure as long as they have different scopes.
+
+Syntax
+```sql
+DECLARE VarName DataType (VarLength) [DEFAULT DefaultValue];
+
+SET VarName = value;
+
+SELECT ColName
+INTO VarName
+FROM TableName;
+```
+
+Example
+```sql
+-- Query 1
+DELIMITER **
+CREATE PROCEDURE Summary()
+BEGIN
+    ``` storing the average net worth of all actors in our Actors table
+    ``` The values 6 and 2 in parentheses mean that the number can be 6 digits long 
+    ``` and the decimal part will have 2 digits.
+    DECLARE AvgNetWorth DEC(6,2) DEFAULT 0.0;
+    DECLARE TotalM, TotalF INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO TotalM
+    FROM Actors
+    WHERE Gender = 'Male';
+    
+    SELECT COUNT(*) INTO TotalF
+    FROM Actors
+    WHERE Gender = 'Female';
+    
+    SELECT AVG(NetWorthInMillions) INTO AvgNetWorth
+    FROM Actors;
+    
+    SELECT TotalM, TotalF, AvgNetWorth;
+END**
+DELIMITER ;
+
+-- Query 2
+CALL Summary();
+
+```
