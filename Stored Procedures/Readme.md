@@ -106,15 +106,35 @@ FROM TableName;
 
 Example
 ```sql
--- Query 1
+
+-- storing the average net worth of all actors in our Actors table
+-- The values 6 and 2 in parentheses mean that the number can be 6 digits long 
+-- and the decimal part will have 2 digits.
+DECLARE AvgNetWorth DEC(6,2) DEFAULT 0.0;
+
+-- create more than one variable in a single DECLARE statement provided they have the same data type
+-- store the total number of males and females from our Actors table in two variables TotalM and TotalF
+DECLARE TotalM, TotalF INT DEFAULT 0;
+
+-- assign values to them using SET or SELECT INTO
+SET TotalM = 6;
+SET TotalF = 4;
+
+-- use the AVG aggregate function to find the average value of 
+-- the NetWorthInMillions column of the Actors table 
+-- and then assign that value to the AvgNetWorth variable.
+SELECT AVG(NetWorthInMillions)
+INTO AvgNetWorth
+FROM Actors;
+```
+Define a stored procedure that declares, assigns and displays value to variables:
+```sql
 DELIMITER **
+
 CREATE PROCEDURE Summary()
 BEGIN
-    ``` storing the average net worth of all actors in our Actors table
-    ``` The values 6 and 2 in parentheses mean that the number can be 6 digits long 
-    ``` and the decimal part will have 2 digits.
-    DECLARE AvgNetWorth DEC(6,2) DEFAULT 0.0;
     DECLARE TotalM, TotalF INT DEFAULT 0;
+    DECLARE AvgNetWorth DEC(6,2) DEFAULT 0.0;
     
     SELECT COUNT(*) INTO TotalM
     FROM Actors
@@ -124,14 +144,20 @@ BEGIN
     FROM Actors
     WHERE Gender = 'Female';
     
-    SELECT AVG(NetWorthInMillions) INTO AvgNetWorth
+    SELECT AVG(NetWorthInMillions)
+    INTO AvgNetWorth
     FROM Actors;
     
     SELECT TotalM, TotalF, AvgNetWorth;
 END**
+
 DELIMITER ;
+```
+This stored procedure will calculate the total number of males and females in the Actors table as well as the average net worth of all actors and display the result when called. 
 
--- Query 2
+The variables are declared in the `BEGIN` `END` block and will be out of scope after the `END` statement is executed. 
+
+To execute the Summary stored procedure run the following statement:
+```sql
 CALL Summary();
-
 ```
