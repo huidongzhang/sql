@@ -779,7 +779,7 @@ A type of pattern matching operation based on the regular expressions and the RE
 |[:space:] |to match white space,| 
 |[:punct:] |is match punctuations|
 |[:upper:] |for upper class letters.|
-| p1 p2 p3	|Alternation; matches any of the patterns p1, p2, or p3|
+| p1\| p2\| p3	|Alternation; matches any of the patterns p1, p2, or p3|
 |{n}	|n instances of preceding element|
 |{m,n}	|m through n instances of preceding element|
 
