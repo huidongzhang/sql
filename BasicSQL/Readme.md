@@ -750,7 +750,36 @@ SELECT MaritalStatus, AVG(NetworthInMillions) AS NetWorth
 FROM Actors WHERE MaritalStatus='Married' 
 GROUP BY MaritalStatus;
 ```
+### REGEXP
+A type of pattern matching operation based on the regular expressions and the REGEXP operator.
 
+1. It provide a powerful and flexible pattern match that can help us implement power search utilities for our database systems.
+2. `REGEXP` is the operator used when performing regular expression pattern matches. RLIKE is the synonym.
+3. It also supports a number of metacharacters which allow more flexibility and control when performing pattern matching.
+4. The backslash is used as an escape character. It’s only considered in the pattern match if double backslashes have used.
+5. Not case sensitive.
 
+|Pattern	| What the Pattern matches|
+|*	|Zero or more instances of string preceding it|
+|+	|One or more instances of strings preceding it|
+|.	|Any single character|
+|?	|Match zero or one instances of the strings preceding it.|
+|^	|caret(^) matches Beginning of string|
+|$	|End of string|
+|[abc]	|Any character listed between the square brackets|
+|[^abc]	|Any character not listed between the square brackets|
+|[A-Z]	|match any upper case letter.|
+|[a-z]	|match any lower case letter|
+|[0-9]	|match any digit from 0 through to 9.|
+|[[:<:]]	|matches the beginning of words.|
+|[[:>:]]	|matches the end of words.|
+|[:class:]	|matches a character class i.e.| 
+|[:alpha:] |to match letters, |
+|[:space:] |to match white space,| 
+|[:punct:] |is match punctuations|
+|[:upper:] |for upper class letters.|
+| p1|p2|p3	|Alternation; matches any of the patterns p1, p2, or p3|
+|{n}	|n instances of preceding element|
+|{m,n}	|m through n instances of preceding element|
 
 
