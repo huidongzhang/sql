@@ -783,4 +783,34 @@ A type of pattern matching operation based on the regular expressions and the RE
 |{n}	|n instances of preceding element|
 |{m,n}	|m through n instances of preceding element|
 
+Examples with explanation :
+Match beginning of string(^):
+Gives all the names starting with ‘sa’.Example- sam,samarth.
+```sql
+SELECT name FROM student_tbl WHERE name REGEXP '^sa';
+```
 
+Match the end of a string($):
+Gives all the names ending with ‘on’.Example – norton,merton.
+```sql
+SELECT name FROM student_tbl WHERE name REGEXP 'on$';
+```
+
+Match zero or one instance of the strings preceding it(?):
+Gives all the titles containing ‘com’.Example – comedy , romantic comedy.
+```sql
+SELECT title FROM movies_tbl WHERE title REGEXP 'com?';
+```
+
+Matches any of the patterns p1, p2, or p3(p1|p2|p3):
+Gives all the names containing ‘be’ or ‘ae’.Example – Abel, Baer.
+```sql
+SELECT name FROM student_tbl WHERE name REGEXP 'be|ae' ;
+```
+
+Matches any lower case letter between ‘a’ to ‘z’- ([a-z]) ([a-z] and (.)):
+Retrieve all names that contain a letter in the range of ‘b’ and ‘g’, followed by any character, followed by the letter ‘a’.Example – Tobias, sewall.
+Matches any single character(.)
+```sql
+SELECT name FROM student_tbl WHERE name REGEXP '[b-g].[a]' ;
+```
